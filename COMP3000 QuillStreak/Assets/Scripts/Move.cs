@@ -19,6 +19,8 @@ public class Move : MonoBehaviour
     }
     public void move(float value) 
     {
-        transform.position = new Vector3(value, 0,0);
+        Vector3 ToMove = transform.position;
+        ToMove.x = value;
+        transform.position = ToMove;
     }
 }
