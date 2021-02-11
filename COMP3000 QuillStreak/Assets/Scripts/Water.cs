@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Rotate : MonoBehaviour
 {
     // Start is called before the first frame update
     public float speed = 1.2f;
+    
     void Start()
     {
         
@@ -15,5 +17,9 @@ public class Rotate : MonoBehaviour
     void FixedUpdate()
     {
         transform.Rotate(new Vector3(0, 0, speed), Space.Self);
+        if (Input.GetKeyDown(KeyCode.P)) 
+        {
+            SceneManager.LoadScene("Dictionary Test");
+        }
     }
 }
