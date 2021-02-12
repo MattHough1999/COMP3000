@@ -18,7 +18,8 @@ public class Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = Vector3.SmoothDamp(transform.position, ToMove, ref velocity, smoothTime);
+        transform.position = Vector3.SmoothDamp(transform.position, ToMove, ref velocity, smoothTime); //smooths the movement between changes in the slider value
+
     }
     public void move(float value) 
     {
