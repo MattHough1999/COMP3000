@@ -35,10 +35,11 @@ public class MakeWord : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         if(transform.childCount != childs) 
         {
             transform.position = new Vector3(transform.position.x - (50 * (transform.childCount / wordList.Count)), transform.position.y, transform.position.z);
-        }
+        }*/
         childs = transform.childCount;
         DefaultMode();
         getPos();
@@ -67,7 +68,7 @@ public class MakeWord : MonoBehaviour
             else 
             {
                 GameObject newLetter = GameObject.Instantiate(letter, transform);
-                newLetter.transform.position = new Vector3(transform.position.x + 100 * i, (transform.position.y), (transform.position.z));
+                newLetter.transform.position = new Vector3(transform.position.x + 3.6f * i, (transform.position.y), (transform.position.z));
                 newLetter.GetComponentInChildren<Text>().text = CharWord[i].ToString();
                 newWord[i] = newLetter;
             }
@@ -76,7 +77,7 @@ public class MakeWord : MonoBehaviour
         wordList.Add(newWord);
         for(int c = 0; c < wordList[wordList.Count-1].Length; c++)
         {
-            wordList[wordList.Count-1][c].transform.position = wordList[wordList.Count-1][c].transform.position + new Vector3(0, -100 * wordList.Count, 0);
+            wordList[wordList.Count-1][c].transform.position = wordList[wordList.Count-1][c].transform.position + new Vector3(0, -3.6f * wordList.Count, 0);
         }
         
     }
@@ -90,12 +91,11 @@ public class MakeWord : MonoBehaviour
     }
     string[] MakeDictionary() 
     {
-        string path = "Dictionary.txt";
-        
-        if (path.Length != 0)
+        TextAsset txtFile = (TextAsset)Resources.Load("Dictionary", typeof(TextAsset));
+
+        if (txtFile.text.Length != 0)
         {
-            string[] fileContent = File.ReadAllLines(path);
-            
+            string[] fileContent = txtFile.text.Split('\n');
             return fileContent;
         }
         return null;

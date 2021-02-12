@@ -16370,6 +16370,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value: 0
+  smoothTime: 0.6
 --- !u!54 &1966939290
 Rigidbody:
   m_ObjectHideFlags: 0
