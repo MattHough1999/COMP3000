@@ -6,11 +6,10 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-
-
 public class MakeWord : MonoBehaviour
 {
     public GameObject letter;
+    public Slider slider;
     public List<GameObject[]> wordList;
     public int difficulty = 6;
     private string[] dictionary;
@@ -18,7 +17,8 @@ public class MakeWord : MonoBehaviour
     private KeyCode lastKey = KeyCode.A;
     private int wordPos = 0;
     private int letterPos = 0;
-    
+    private int wholePos = 0;
+    private Slider jimmy;
     // Start is called before the first frame update
     void Start()
     {
@@ -29,12 +29,9 @@ public class MakeWord : MonoBehaviour
         {
             writeWord(PickWord());
         }
-
         writeWord(PickWord());
-
-
     }
-
+    
     // Update is called once per frame
     void Update()
     {
@@ -43,39 +40,16 @@ public class MakeWord : MonoBehaviour
             transform.position = new Vector3(transform.position.x - (50 * (transform.childCount / wordList.Count)), transform.position.y, transform.position.z);
         }
         childs = transform.childCount;
-
-        if (Input.GetKeyDown(KeyCode.Backspace) == true)
-        {
-            if (letterPos > 0)
-            {
-                letterPos--; wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.white;  
-            }
-            else { wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.white; }
-        }
-
-        else if (Input.anyKeyDown)
-        {
-            if (Input.inputString[0].ToString() == wordList[wordPos][letterPos].GetComponentInChildren<Text>().text)
-            {
-                wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.green;
-                letterPos++;
-
-                //make KrillStreak asap
-            }
-            
-            else if (Input.inputString[0].ToString() == KeyCode.LeftShift.ToString() || Input.inputString[0].ToString() == KeyCode.RightShift.ToString()) { }
-            else if (Input.inputString[0].ToString() == KeyCode.CapsLock.ToString()) { }
-            else { wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.red; letterPos++; }
-        }
-        if (letterPos == wordList[wordPos].Length) 
-        {
-            if(wordPos == wordList.Count -1) { SceneManager.LoadScene("Space");  }
-            letterPos = 0;
-            wordPos++;
-        }
-
+        DefaultMode();
+        getPos();
+     }
+    void getPos() 
+    {
+        float pos = 0;
+        pos = (float)wholePos / (float)transform.childCount;
+        slider.value = pos * 160;
+        Debug.Log(pos.ToString());
     }
-    
     void writeWord(string word) 
     {
         char[] CharWord = new char[word.Length];
@@ -125,6 +99,40 @@ public class MakeWord : MonoBehaviour
             return fileContent;
         }
         return null;
+    }
+    void DefaultMode() 
+    {
+        if (Input.GetKeyDown(KeyCode.Backspace) == true)
+        {
+            if (letterPos > 0)
+            {
+                wholePos--; letterPos--;  wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.white;
+            }
+            else { wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.white; }
+        }
+
+        else if (Input.anyKeyDown)
+
+
+        {
+            if (Input.inputString[0].ToString() == wordList[wordPos][letterPos].GetComponentInChildren<Text>().text)
+            {
+                wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.green;
+                letterPos++;
+                wholePos++;
+                //make KrillStreak asap
+            }
+
+            else if (Input.inputString[0].ToString() == KeyCode.LeftShift.ToString() || Input.inputString[0].ToString() == KeyCode.RightShift.ToString()) { }
+            else if (Input.inputString[0].ToString() == KeyCode.CapsLock.ToString()) { }
+            else { wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.red; letterPos++; wholePos++; }
+        }
+        if (letterPos == wordList[wordPos].Length)
+        {
+            if (wordPos == wordList.Count - 1) { SceneManager.LoadScene("Space"); }
+            letterPos = 0;
+            wordPos++;
+        }
     }
    
 }

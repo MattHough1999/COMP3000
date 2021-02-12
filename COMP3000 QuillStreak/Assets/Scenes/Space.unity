@@ -4904,6 +4904,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
+  - {fileID: 1732478948}
   - {fileID: 2113246145}
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -6245,6 +6246,52 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1721380761}
   m_Mesh: {fileID: 289301614986012343, guid: 69c4525a41c227e46b1097e8dd7a6c55, type: 3}
+--- !u!1 &1732478947
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1732478948}
+  - component: {fileID: 1732478949}
+  m_Layer: 0
+  m_Name: WordMaker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1732478948
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1732478947}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.15997314, y: -0.32000732, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1277642178}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1732478949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1732478947}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99ee4213f96e81248bfe37becc064c4b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  letter: {fileID: 3367716563271872068, guid: bb539d8d7093f264c9fb36c597336921, type: 3}
+  slider: {fileID: 2113246146}
+  difficulty: 20
 --- !u!1 &1772749582
 GameObject:
   m_ObjectHideFlags: 0
@@ -7214,6 +7261,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Value: 0
+  smoothTime: 0.3
 --- !u!54 &1966939290
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7859,7 +7907,7 @@ RectTransform:
   - {fileID: 150554584}
   - {fileID: 1350678144}
   m_Father: {fileID: 1277642178}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}

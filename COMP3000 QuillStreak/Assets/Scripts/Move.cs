@@ -7,6 +7,9 @@ public class Move : MonoBehaviour
     // Start is called before the first frame update
     Transform PTransform;
     public float Value;
+    public float smoothTime = 0.3F;
+    private Vector3 velocity = Vector3.zero;
+    private Vector3 ToMove;
     void Start()
     {
         PTransform = transform;
@@ -15,12 +18,12 @@ public class Move : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        transform.position = Vector3.SmoothDamp(transform.position, ToMove, ref velocity, smoothTime);
     }
     public void move(float value) 
     {
-        Vector3 ToMove = transform.position;
+        ToMove = transform.position;
         ToMove.x = value;
-        transform.position = ToMove;
     }
+
 }

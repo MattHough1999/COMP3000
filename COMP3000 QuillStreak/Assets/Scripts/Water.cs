@@ -17,9 +17,6 @@ public class Rotate : MonoBehaviour
     void FixedUpdate()
     {
         transform.Rotate(new Vector3(0, 0, speed), Space.Self);
-        if (Input.GetKeyDown(KeyCode.P)) 
-        {
-            SceneManager.LoadScene("Dictionary Test");
-        }
+        
     }
 }
