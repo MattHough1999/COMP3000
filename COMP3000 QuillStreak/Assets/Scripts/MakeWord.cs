@@ -19,9 +19,10 @@ public class MakeWord : MonoBehaviour
     private int letterPos = 0;
     private int wholePos = 0;
     private Slider jimmy;
-    // Start is called before the first frame update
+    
     void Start()
     {
+        
         wordList = new List<GameObject[]>();
         dictionary = MakeDictionary();
         int numWords = Random.Range(0, 4);
@@ -32,18 +33,20 @@ public class MakeWord : MonoBehaviour
         writeWord(PickWord());
     }
     
-    // Update is called once per frame
+    
     void Update()
     {
-        /*
+        
         if(transform.childCount != childs) 
         {
             transform.position = new Vector3(transform.position.x - (50 * (transform.childCount / wordList.Count)), transform.position.y, transform.position.z);
-        }*/
+        }
         childs = transform.childCount;
         DefaultMode();
         getPos();
      }
+
+    
     void getPos() 
     {
         float pos = 0;
@@ -68,7 +71,7 @@ public class MakeWord : MonoBehaviour
             else 
             {
                 GameObject newLetter = GameObject.Instantiate(letter, transform);
-                newLetter.transform.position = new Vector3(transform.position.x + 3.6f * i, (transform.position.y), (transform.position.z));
+                newLetter.transform.position = new Vector3(transform.position.x + 100f * i, (transform.position.y), (transform.position.z));
                 newLetter.GetComponentInChildren<Text>().text = CharWord[i].ToString();
                 newWord[i] = newLetter;
             }
@@ -77,7 +80,7 @@ public class MakeWord : MonoBehaviour
         wordList.Add(newWord);
         for(int c = 0; c < wordList[wordList.Count-1].Length; c++)
         {
-            wordList[wordList.Count-1][c].transform.position = wordList[wordList.Count-1][c].transform.position + new Vector3(0, -3.6f * wordList.Count, 0);
+            wordList[wordList.Count-1][c].transform.position = wordList[wordList.Count-1][c].transform.position + new Vector3(0, -100f * wordList.Count, 0);
         }
         
     }
