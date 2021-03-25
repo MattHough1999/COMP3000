@@ -6,15 +6,24 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: b2b888c8058464843b4632b09cd15832
+  - enabled: 1
     path: Assets/Scenes/Space.unity
     guid: 50810aaf20842b743af29a3ea39dab2b
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Forest.unity
     guid: 41a199195617a454aa6ec2474d0d3ccb
   - enabled: 0
     path: Assets/Scenes/Dictionary Test.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/WildWest.unity
     guid: 9d5ceeafb269eb74aa5e02d1435503f9
+  - enabled: 1
+    path: Assets/Scenes/Castle.unity
+    guid: 7cee427b8f99cb94e928b9dfe9e6d8dd
+  - enabled: 0
+    path: Assets/Scenes/OverWorld.unity
+    guid: 77aad061b36b86642bb96fd2cac8e7c6
   m_configObjects: {}

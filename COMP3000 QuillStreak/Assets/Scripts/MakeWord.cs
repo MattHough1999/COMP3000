@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using UnityEditor;
+//using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -9,28 +9,31 @@ using UnityEngine.UI;
 public class MakeWord : MonoBehaviour
 {
     public GameObject letter;
+    //public AudioSource source;
     public Slider slider;
     public List<GameObject[]> wordList;
+    public Animator animator;
     public int difficulty = 6;
     private string[] dictionary;
     private int childs = 0;
-    private KeyCode lastKey = KeyCode.A;
     private int wordPos = 0;
     private int letterPos = 0;
     private int wholePos = 0;
-    private Slider jimmy;
-    
+    private float wordPer = 0.7f;
+    // private Slider jimmy;
+    //make KrillStreak asap
     void Start()
     {
         
         wordList = new List<GameObject[]>();
         dictionary = MakeDictionary();
-        int numWords = Random.Range(0, 4);
-        for(int i = 0; i < numWords; i++)
+        int numWords = PlayerPrefs.GetInt("WordCount");
+        difficulty = PlayerPrefs.GetInt("Difficulty");
+        for(int i = 0; i <= numWords; i++)
         {
             writeWord(PickWord());
         }
-        writeWord(PickWord());
+        //writeWord(PickWord());
     }
     
     
@@ -71,7 +74,7 @@ public class MakeWord : MonoBehaviour
             else 
             {
                 GameObject newLetter = GameObject.Instantiate(letter, transform);
-                newLetter.transform.position = new Vector3(transform.position.x + 100f * i, (transform.position.y), (transform.position.z));
+                newLetter.transform.position = new Vector3(transform.position.x + 130f * i, (transform.position.y), (transform.position.z));
                 newLetter.GetComponentInChildren<Text>().text = CharWord[i].ToString();
                 newWord[i] = newLetter;
             }
@@ -80,21 +83,22 @@ public class MakeWord : MonoBehaviour
         wordList.Add(newWord);
         for(int c = 0; c < wordList[wordList.Count-1].Length; c++)
         {
-            wordList[wordList.Count-1][c].transform.position = wordList[wordList.Count-1][c].transform.position + new Vector3(0, -100f * wordList.Count, 0);
+            wordList[wordList.Count-1][c].transform.position = wordList[wordList.Count-1][c].transform.position + new Vector3(0, -130f * wordList.Count, 0);
         }
         
     }
     string PickWord() 
     {
         string word = dictionary[Random.Range(0, dictionary.Length -1)];
+               
         if(word.Length >= difficulty) { Debug.Log(word); word = PickWord(); }
-        else if(word.Length >= difficulty / 2) { Debug.Log(word); word = PickWord(); }
-        
+        else if(word.Length <= difficulty / 2) { Debug.Log(word); word = PickWord(); }
+
         return word;
     }
     string[] MakeDictionary() 
     {
-        TextAsset txtFile = (TextAsset)Resources.Load("Dictionary", typeof(TextAsset));
+        TextAsset txtFile = (TextAsset)Resources.Load(PlayerPrefs.GetString("SelectedDictionary"), typeof(TextAsset));
 
         if (txtFile.text.Length != 0)
         {
@@ -105,7 +109,8 @@ public class MakeWord : MonoBehaviour
     }
     void DefaultMode() 
     {
-        if (Input.GetKeyDown(KeyCode.Backspace) == true)
+        
+        if (Input.GetKeyDown(KeyCode.Backspace) == true) //handles backspace
         {
             if (letterPos > 0)
             {
@@ -114,27 +119,35 @@ public class MakeWord : MonoBehaviour
             else { wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.white; }
         }
 
-        else if (Input.anyKeyDown)
-
-
+        else if (Input.anyKeyDown) //handles any other key
         {
             if (Input.inputString[0].ToString() == wordList[wordPos][letterPos].GetComponentInChildren<Text>().text)
             {
                 wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.green;
+                Debug.Log(wordList[wordPos].Length);
+                //wordPer += wordList[wordPos].Length/100;
                 letterPos++;
                 wholePos++;
-                //make KrillStreak asap
             }
 
             else if (Input.inputString[0].ToString() == KeyCode.LeftShift.ToString() || Input.inputString[0].ToString() == KeyCode.RightShift.ToString()) { }
             else if (Input.inputString[0].ToString() == KeyCode.CapsLock.ToString()) { }
             else { wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.red; letterPos++; wholePos++; }
         }
-        if (letterPos == wordList[wordPos].Length)
+        if (letterPos == wordList[wordPos].Length) //checks for word end
         {
-            if (wordPos == wordList.Count - 1) { SceneManager.LoadScene("Space"); }
+            
+            if (wordPos == wordList.Count - 1) { PlayerPrefs.SetInt("Difficulty", PlayerPrefs.GetInt("Difficulty") + 1); SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
+            Debug.Log(wordPer);
+            if (wordPer <= 0.65f)
+            {
+                animator.SetTrigger("Stumble");
+            }
+            else { animator.SetTrigger("Celebrate"); }
             letterPos = 0;
             wordPos++;
+            //wordPer = 0.00f;
+            //source.Play();
         }
     }
    
