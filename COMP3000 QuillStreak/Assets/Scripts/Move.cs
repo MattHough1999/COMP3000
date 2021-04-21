@@ -13,12 +13,12 @@ public class Move : MonoBehaviour
     public Vector3 velocity = Vector3.zero;
     private Vector3 ToMove;
     float i = 0.00f;
-    public Rigidbody rb;
+    //public Rigidbody rb;
 
     void Start()
     {
         PTransform = transform;
-        rb = GetComponent<Rigidbody>();
+        //rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame

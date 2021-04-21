@@ -9,8 +9,14 @@ public class HomeMenu : MonoBehaviour
     public Button secret;
     public Text Difftext;
     public Text WordText;
+    public Text NameText;
+    public InputField PlayerName;
     public Slider DiffSlider;
     public Slider WordSlider;
+    public Image Blank;
+    public Sprite Check;
+    public Sprite Cross;
+    public Sprite Cirlce;
     private int words = 4;
     private int diff = 5;
     
@@ -18,57 +24,59 @@ public class HomeMenu : MonoBehaviour
     void Start()
     {
         PickEng();
-
+        PlayerPrefs.SetInt("Lives", 6);
         PlayerPrefs.SetInt("Difficulty", diff);
         PlayerPrefs.SetInt("WordCount", words);
+        PlayerPrefs.SetString("currPlayer", "Global");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A) || A == true)
-            {
-            Debug.Log("a");
-                A = true;
-            if (Input.GetKeyDown(KeyCode.D) || d == true)
-            {
-                Debug.Log("d");
-                d = true;
-                if (Input.GetKeyDown(KeyCode.U) || u == true)
-                {
-                    Debug.Log("u");
-                    u = true;
-                    if (Input.GetKeyDown(KeyCode.L) || l == true)
-                    {
-                        Debug.Log("l");
-                        l = true;
-                        if (Input.GetKeyDown(KeyCode.T) || t == true)
-                        {
-                            Debug.Log("t");
-                            t = true;
-                            secret.interactable = true;
-                            secret.image.enabled = true;
-                            //secret.enabled = true;
-
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
     public void diffChange() 
     {
         diff = (int)DiffSlider.value;
-        Difftext.text = "Difficulty: " + diff;
+        Difftext.text = "Difficulty: " + (diff - 2);
         PlayerPrefs.SetInt("Difficulty", diff);
     }
     public void wordChange()
     {
         words = (int)WordSlider.value;
-        WordText.text = "Word Count: " + words;
+        WordText.text = "Word Count: " + (words + 1);
         PlayerPrefs.SetInt("WordCount", words);
     }
+    public void nameChange() 
+    {
+        PlayerPrefs.SetString("currPlayer", PlayerName.text);
+
+        bool Found = false;
+        string allPlayers = PlayerPrefs.GetString("ALLPLAYERS");
+        string[] ArrPlayers = allPlayers.Split(' ');
+
+        for (int i = 0; i < ArrPlayers.Length; i++)
+        {
+            if (ArrPlayers[i] == PlayerName.text)
+            {
+                Found = true;
+            }
+        }
+        if (Found == true)
+        {
+            NameText.text = "Welcome Back!";
+            Blank.sprite = Check;
+            PlayerPrefs.SetString("currPlayer", PlayerName.text);
+        }
+        else if (Found == false)
+        {
+            NameText.text = "New Player Added!";
+            Blank.sprite = Cirlce;
+            PlayerPrefs.SetString("ALLPLAYERS", allPlayers + PlayerName.text + ' ');
+            PlayerPrefs.SetString("currPlayer", PlayerName.text);
+        }
+        else 
+        {
+            NameText.text = "Something went wrong! Please try again...";
+            Blank.sprite = Cross;
+        }
+    }
+    
     public void PickEng() 
     {
         PlayerPrefs.SetString("SelectedDictionary", "Dictionary");
@@ -95,6 +103,7 @@ public class HomeMenu : MonoBehaviour
     }
     public void loadCastle()
     {
+        nameChange();
         SceneManager.LoadScene("Castle");
     }
     private bool A = false;
