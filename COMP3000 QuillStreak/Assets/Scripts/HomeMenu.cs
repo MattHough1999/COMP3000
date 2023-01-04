@@ -27,7 +27,11 @@ public class HomeMenu : MonoBehaviour
         PlayerPrefs.SetInt("Lives", 6);
         PlayerPrefs.SetInt("Difficulty", diff);
         PlayerPrefs.SetInt("WordCount", words);
+        
         PlayerPrefs.SetString("currPlayer", "Global");
+        string players = PlayerPrefs.GetString("ALLPLAYERS");
+        if (!players.Contains("Global")) { PlayerPrefs.SetString("ALLPLAYERS", "Global "); PlayerPrefs.SetString("Global", ""); }
+        
     }
 
     public void diffChange() 
@@ -35,6 +39,7 @@ public class HomeMenu : MonoBehaviour
         diff = (int)DiffSlider.value;
         Difftext.text = "Difficulty: " + (diff - 2);
         PlayerPrefs.SetInt("Difficulty", diff);
+
     }
     public void wordChange()
     {
@@ -79,14 +84,17 @@ public class HomeMenu : MonoBehaviour
     
     public void PickEng() 
     {
+        PlayerPrefs.SetInt("RunDefault@@", 1);
         PlayerPrefs.SetString("SelectedDictionary", "Dictionary");
     }
     public void PickRU()
     {
+        PlayerPrefs.SetInt("RunDefault@@", 0);
         PlayerPrefs.SetString("SelectedDictionary", "DictionaryRU");
     }
     public void PickSecret() 
     {
+        PlayerPrefs.SetInt("RunDefault@@", 1);
         PlayerPrefs.SetString("SelectedDictionary", "filter");
     }
     public void loadSpace() 
@@ -105,6 +113,14 @@ public class HomeMenu : MonoBehaviour
     {
         nameChange();
         SceneManager.LoadScene("Castle");
+    }
+    public void exitGame() 
+    {
+        Application.Quit();
+    }
+    public void viewStats() 
+    {
+        SceneManager.LoadScene("StatsPage");
     }
     private bool A = false;
     private bool d = false;

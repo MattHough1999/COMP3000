@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Stats : MonoBehaviour
@@ -14,6 +15,7 @@ public class Stats : MonoBehaviour
     
     private void Start()
     {
+        PlayerPrefs.SetInt("RunDefault@@", 0);
         getPlayers();
     }
     private void Update()
@@ -81,6 +83,30 @@ public class Stats : MonoBehaviour
         getStats(dropdown.options[dropdown.value].text);
     }
 
-    
+    public void returnToMenu() 
+    {
+        SceneManager.LoadScene("Menu");
+    }
        
+    public void resetStats() 
+    {
+        PlayerPrefs.SetString(dropdown.options[dropdown.value].text, "");
+        getStats();
+    }
+
+    public void resetAll() 
+    {
+        for (int i = 0; i < dropdown.options.Count; i++)
+        {
+            PlayerPrefs.SetString(dropdown.options[i].text, "");
+        }
+        PlayerPrefs.SetString("ALLPLAYERS", "Global ");
+        dropdown.options.Clear();
+        Dropdown.OptionData option = new Dropdown.OptionData();
+        option.text = "Global";
+        dropdown.options.Add(option);
+        dropdown.value = 0;
+        getStats();
+
+    }
 }

@@ -58,14 +58,19 @@ public class MakeWord : MonoBehaviour
     
     void Update()
     {
-        
         if(transform.childCount != childs) 
         {
             transform.position = new Vector3(transform.position.x - (50 * (transform.childCount / wordList.Count)), transform.position.y, transform.position.z);
         }
         childs = transform.childCount;
-        
-        DefaultMode();
+        if(PlayerPrefs.GetInt("RunDefault") == 1)
+        {
+            DefaultMode();
+        }
+        else 
+        {
+            NonLatinMode();
+        }
         getPos();
      }
 
@@ -93,7 +98,7 @@ public class MakeWord : MonoBehaviour
             else 
             {
                 GameObject newLetter = GameObject.Instantiate(letter, transform);
-                newLetter.transform.position = new Vector3(transform.position.x + 85f * i, (transform.position.y), (transform.position.z));
+                newLetter.transform.position = new Vector3(transform.position.x + (Screen.currentResolution.width /19f) * i, (transform.position.y), (transform.position.z));
                 newLetter.GetComponentInChildren<Text>().text = CharWord[i].ToString();
                 newWord[i] = newLetter;
             }
@@ -102,7 +107,8 @@ public class MakeWord : MonoBehaviour
         wordList.Add(newWord);
         for(int c = 0; c < wordList[wordList.Count-1].Length; c++)
         {
-            wordList[wordList.Count-1][c].transform.position = wordList[wordList.Count-1][c].transform.position + new Vector3(0, -100f * wordList.Count, 0);
+            
+            wordList[wordList.Count-1][c].transform.position = wordList[wordList.Count-1][c].transform.position + new Vector3(0, (Screen.currentResolution.height / -9f) * wordList.Count, 0);
         }
         
     }
@@ -129,12 +135,14 @@ public class MakeWord : MonoBehaviour
     }
     void DefaultMode() 
     {
-        
-        if (Input.GetKeyDown(KeyCode.Backspace) == true) //handles backspace
+
+        if (Input.GetKeyDown(KeyCode.Escape) == true) SceneManager.LoadScene("Menu");
+
+        else if (Input.GetKeyDown(KeyCode.Backspace) == true) //handles backspace
         {
             if (letterPos > 0)
             {
-                wholePos--; letterPos--;  wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.white;
+                wholePos--; letterPos--; wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.white;
             }
             else { wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.white; }
             wordString = wordString.Substring(0, wordString.Length - 1);
@@ -149,20 +157,20 @@ public class MakeWord : MonoBehaviour
                 wordString += char.ToUpper(currChar);
                 letterPos++;
                 wholePos++;
-                
+
             }
 
             else if (Input.inputString[0].ToString() == KeyCode.LeftShift.ToString() || Input.inputString[0].ToString() == KeyCode.RightShift.ToString()) { }
             else if (Input.inputString[0].ToString() == KeyCode.CapsLock.ToString()) { }
-            else 
-            { 
+            else
+            {
                 wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.red;
                 currChar = wordList[wordPos][letterPos].GetComponentInChildren<Text>().text.ToCharArray()[0];
                 wordString += char.ToLower(currChar);
-                letterPos++; 
+                letterPos++;
                 wholePos++;
-               
-                
+
+
             }
         }
         if (letterPos == wordList[wordPos].Length) //checks for word end
@@ -181,7 +189,7 @@ public class MakeWord : MonoBehaviour
 
 
             //maxdif = 22
-            perCalc = 4.5f * ((float)difficulty / 100);
+            perCalc = 8.5f * ((float)difficulty / 100);
             if (wordPer <= (float)4 * ((float)difficulty / 100) && wordPer != 1.00f)
             {
                 hpBar.transform.GetChild(lives -1).gameObject.GetComponent<Image>().color = Color.red;
@@ -193,7 +201,7 @@ public class MakeWord : MonoBehaviour
             else { animator.SetTrigger("Celebrate"); }
             
 
-            if (wordPos == wordList.Count - 1) { PlayerPrefs.SetInt("Difficulty", PlayerPrefs.GetInt("Difficulty") + 1); SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
+            if (wordPos == wordList.Count - 1 && lives != 0) { PlayerPrefs.SetInt("Difficulty", PlayerPrefs.GetInt("Difficulty") + 1); SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
             
             correct = 0.0f;
             incorrect = 0.0f;
@@ -204,6 +212,84 @@ public class MakeWord : MonoBehaviour
         }
     }
 
+    void NonLatinMode()
+    {
+
+        if (Input.GetKeyDown(KeyCode.Backspace) == true) //handles backspace
+        {
+            if (letterPos > 0)
+            {
+                wholePos--; letterPos--; wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.white;
+            }
+            else { wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.white; }
+            wordString = wordString.Substring(0, wordString.Length - 1);
+        }
+
+
+
+        else if (Input.anyKeyDown) //handles any other key
+        {
+            if (Input.inputString[0].ToString() == wordList[wordPos][letterPos].GetComponentInChildren<Text>().text)
+            {
+                wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.green;
+                currChar = wordList[wordPos][letterPos].GetComponentInChildren<Text>().text.ToCharArray()[0];
+                wordString += char.ToUpper(currChar);
+                letterPos++;
+                wholePos++;
+
+            }
+
+            else if (Input.inputString[0].ToString() == KeyCode.LeftShift.ToString() || Input.inputString[0].ToString() == KeyCode.RightShift.ToString()) { }
+            else if (Input.inputString[0].ToString() == KeyCode.CapsLock.ToString()) { }
+            else
+            {
+                wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.red;
+                currChar = wordList[wordPos][letterPos].GetComponentInChildren<Text>().text.ToCharArray()[0];
+                wordString += char.ToLower(currChar);
+                letterPos++;
+                wholePos++;
+
+
+            }
+        }
+        if (letterPos == wordList[wordPos].Length) //checks for word end
+        {
+            //PlayerPrefs.SetString(currPlayer, PlayerPrefs.GetString(currPlayer) + wordString);
+            //PlayerPrefs.SetString("Global", PlayerPrefs.GetString("Global") + wordString);
+            correct = 0.0f;
+            for (int i = 0; i < wordString.Length; i++)
+            {
+                if (char.IsUpper(wordString[i]) == true) correct += 1.0f;
+            }
+
+            wordPer = correct / (float)wordString.Length;
+
+            wordString = "";
+
+
+            //maxdif = 22
+            perCalc = 4.5f * ((float)difficulty / 100);
+            if (wordPer <= (float)4 * ((float)difficulty / 100) && wordPer != 1.00f)
+            {
+                hpBar.transform.GetChild(lives - 1).gameObject.GetComponent<Image>().color = Color.red;
+                lives--;
+                PlayerPrefs.SetInt("Lives", lives);
+                if (lives == 0) { SceneManager.LoadScene("StatsPage"); }
+                animator.SetTrigger("Stumble");
+            }
+            else { animator.SetTrigger("Celebrate"); }
+
+
+            if (wordPos == wordList.Count - 1) { PlayerPrefs.SetInt("Difficulty", PlayerPrefs.GetInt("Difficulty") + 1); SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
+
+            correct = 0.0f;
+            incorrect = 0.0f;
+            letterPos = 0;
+            wordPos++;
+            wordPer = 0.00f;
+            //source.Play();
+        }
+    }
     void findBiggest() 
     {
         string word = "aaaaaaaaaaaaa";
