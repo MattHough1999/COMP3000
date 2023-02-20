@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-//using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -15,18 +14,11 @@ public class MakeWord : MonoBehaviour
     public Animator animator;
     private char currChar;
     private string[] dictionary;
-    private string currPlayer = "Global";
-    private string wordString = "";
+    private string currPlayer = "Global", wordString = "";
     public int difficulty = 28;
-    private int childs = 0;
-    private int wordPos = 0;
-    private int letterPos = 0;
-    private int wholePos = 0;
-    private int lives;
-    private float perCalc = 0.0f;
-    private float correct = 0.0f;
-    private float incorrect = 0.0f;
-    private float wordPer = 0.7f;
+    private int childs = 0, wordPos = 0,letterPos = 0, wholePos = 0,lives,mode;
+    
+    private float perCalc = 0.0f,correct = 0.0f,incorrect = 0.0f, wordPer = 0.7f;
     [SerializeField] GameObject hpBar;
     //make KrillStreak asap
     void Start()
@@ -53,8 +45,8 @@ public class MakeWord : MonoBehaviour
             hpBar.transform.GetChild(i).gameObject.GetComponent<Image>().color = Color.green;
         }
 
+        mode = PlayerPrefs.GetInt("RunDefault@@");
     }
-    
     
     void Update()
     {
@@ -63,7 +55,7 @@ public class MakeWord : MonoBehaviour
             transform.position = new Vector3(transform.position.x - (50 * (transform.childCount / wordList.Count)), transform.position.y, transform.position.z);
         }
         childs = transform.childCount;
-        if(PlayerPrefs.GetInt("RunDefault") == 1)
+        if( mode == 1)
         {
             DefaultMode();
         }
@@ -74,7 +66,6 @@ public class MakeWord : MonoBehaviour
         getPos();
      }
 
-    
     void getPos() 
     {
         float pos = 0;
@@ -116,10 +107,13 @@ public class MakeWord : MonoBehaviour
     {
         
         string word = dictionary[Random.Range(0, dictionary.Length -1)];
-               
-        if(word.Length >= difficulty) {  word = PickWord(); }
-        else if(word.Length <= difficulty / 2) { word = PickWord(); }
+
+        if (word.Length <= difficulty / 2) { word = PickWord(); }
+        //if (difficulty > 28) { return word; }
+        else if (word.Length >= difficulty) {  word = PickWord(); }
         
+        
+
         return word;
     }
     string[] MakeDictionary() 
@@ -136,7 +130,7 @@ public class MakeWord : MonoBehaviour
     void DefaultMode() 
     {
 
-        if (Input.GetKeyDown(KeyCode.Escape) == true) SceneManager.LoadScene("Menu");
+        if (Input.GetKey(KeyCode.Escape)) SceneManager.LoadScene("Menu");
 
         else if (Input.GetKeyDown(KeyCode.Backspace) == true) //handles backspace
         {
@@ -157,7 +151,6 @@ public class MakeWord : MonoBehaviour
                 wordString += char.ToUpper(currChar);
                 letterPos++;
                 wholePos++;
-
             }
 
             else if (Input.inputString[0].ToString() == KeyCode.LeftShift.ToString() || Input.inputString[0].ToString() == KeyCode.RightShift.ToString()) { }
@@ -169,7 +162,6 @@ public class MakeWord : MonoBehaviour
                 wordString += char.ToLower(currChar);
                 letterPos++;
                 wholePos++;
-
 
             }
         }
@@ -192,7 +184,7 @@ public class MakeWord : MonoBehaviour
             perCalc = 8.5f * ((float)difficulty / 100);
             if (wordPer <= (float)4 * ((float)difficulty / 100) && wordPer != 1.00f)
             {
-                hpBar.transform.GetChild(lives -1).gameObject.GetComponent<Image>().color = Color.red;
+                hpBar.transform.GetChild(lives - 1).gameObject.GetComponent<Image>().color = Color.red;
                 lives--;
                 PlayerPrefs.SetInt("Lives", lives);
                 if (lives == 0) { SceneManager.LoadScene("StatsPage"); }
@@ -201,7 +193,14 @@ public class MakeWord : MonoBehaviour
             else { animator.SetTrigger("Celebrate"); }
             
 
-            if (wordPos == wordList.Count - 1 && lives != 0) { PlayerPrefs.SetInt("Difficulty", PlayerPrefs.GetInt("Difficulty") + 1); SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
+            if (wordPos == wordList.Count - 1 && lives != 0) 
+            {
+                if (difficulty <= 27)
+                { 
+                    PlayerPrefs.SetInt("Difficulty", PlayerPrefs.GetInt("Difficulty") + 1); 
+                }
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
+            }
             
             correct = 0.0f;
             incorrect = 0.0f;
@@ -214,7 +213,7 @@ public class MakeWord : MonoBehaviour
 
     void NonLatinMode()
     {
-
+        if (Input.GetKey(KeyCode.Escape)) SceneManager.LoadScene("Menu");
         if (Input.GetKeyDown(KeyCode.Backspace) == true) //handles backspace
         {
             if (letterPos > 0)
@@ -290,7 +289,7 @@ public class MakeWord : MonoBehaviour
             //source.Play();
         }
     }
-    void findBiggest() 
+    void findBiggest()
     {
         string word = "aaaaaaaaaaaaa";
         for(int i = 0; i < dictionary.Length; i++) 

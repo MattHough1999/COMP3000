@@ -17,10 +17,11 @@ public class Stats : MonoBehaviour
     {
         PlayerPrefs.SetInt("RunDefault@@", 0);
         getPlayers();
+        //getStats("Global");
     }
     private void Update()
     {
-        if (doneFirst != true) { getStats("Global"); doneFirst = true; }
+        if (!doneFirst) { getStats("Global"); doneFirst = true; }
     }
 
     public void getPlayers() 
@@ -90,6 +91,15 @@ public class Stats : MonoBehaviour
        
     public void resetStats() 
     {
+        if (dropdown.value == 0) 
+        {
+            resetAll();
+            return;
+        }
+        string remove = PlayerPrefs.GetString(dropdown.options[dropdown.value].text);
+        string global = PlayerPrefs.GetString("Global");
+        global = global.Replace(remove, "");
+        PlayerPrefs.SetString("Global", global);
         PlayerPrefs.SetString(dropdown.options[dropdown.value].text, "");
         getStats();
     }

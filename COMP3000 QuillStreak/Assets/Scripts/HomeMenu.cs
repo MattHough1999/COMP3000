@@ -62,13 +62,13 @@ public class HomeMenu : MonoBehaviour
                 Found = true;
             }
         }
-        if (Found == true)
+        if (Found)
         {
             NameText.text = "Welcome Back!";
             Blank.sprite = Check;
             PlayerPrefs.SetString("currPlayer", PlayerName.text);
         }
-        else if (Found == false)
+        else if (!Found)
         {
             NameText.text = "New Player Added!";
             Blank.sprite = Cirlce;
