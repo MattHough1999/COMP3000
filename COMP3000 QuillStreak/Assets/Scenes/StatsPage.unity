@@ -3000,6 +3000,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   statText: {fileID: 528408895}
   backSpaceCount: {fileID: 845513363}
+  overText: {fileID: 2056523009}
   getStatButton: {fileID: 1809600443}
   sliders:
   - {fileID: 1461582970}

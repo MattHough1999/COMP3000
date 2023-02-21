@@ -191,7 +191,7 @@ public class MakeWord : MonoBehaviour
                 hpBar.transform.GetChild(lives - 1).gameObject.GetComponent<Image>().color = Color.red;
                 lives--;
                 PlayerPrefs.SetInt("Lives", lives);
-                if (lives == 0) { SceneManager.LoadScene("StatsPage"); }
+                if (lives == 0) { PlayerPrefs.SetString("OverText", "Oh No! Your Ran Out Of Lives...\nPick Your Name To See Your Stats!"); SceneManager.LoadScene("StatsPage"); }
                 animator.SetTrigger("Stumble");
             }
             else { animator.SetTrigger("Celebrate"); }

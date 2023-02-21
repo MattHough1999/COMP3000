@@ -22,6 +22,7 @@ public class HomeMenu : MonoBehaviour
         PlayerPrefs.SetInt("Lives", 6);
         PlayerPrefs.SetInt("Difficulty", diff);
         PlayerPrefs.SetInt("WordCount", words);
+        PlayerPrefs.SetString("OverText", "This is the stats page\nPick your name to see your stats!");
         
         PlayerPrefs.SetString("currPlayer", "Global");
         string players = PlayerPrefs.GetString("ALLPLAYERS");

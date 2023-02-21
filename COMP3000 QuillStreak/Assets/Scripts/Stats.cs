@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Stats : MonoBehaviour
 {
-    [SerializeField] Text statText,backSpaceCount;
+    [SerializeField] Text statText,backSpaceCount,overText;
     [SerializeField] Button getStatButton;
     [SerializeField] Slider[] sliders;
     [SerializeField] Dropdown dropdown;
@@ -21,7 +21,7 @@ public class Stats : MonoBehaviour
     }
     private void Update()
     {
-        if (!doneFirst) { getStats("Global"); doneFirst = true; }
+        if (!doneFirst) { getStats("Global"); overText.text = PlayerPrefs.GetString("OverText"); doneFirst = true; }
     }
 
     public void getPlayers() 
