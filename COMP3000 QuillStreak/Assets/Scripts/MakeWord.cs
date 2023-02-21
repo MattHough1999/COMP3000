@@ -14,16 +14,16 @@ public class MakeWord : MonoBehaviour
     public Animator animator;
     private char currChar;
     private string[] dictionary;
-    private string currPlayer = "Global", wordString = "";
+    private string currPlayer = "Global", wordString = "",statString = "";
     public int difficulty = 28;
-    private int childs = 0, wordPos = 0,letterPos = 0, wholePos = 0,lives,mode;
+    private int childs = 0, wordPos = 0,letterPos = 0, wholePos = 0,lives,mode,ScreenPos;
     
     private float perCalc = 0.0f,correct = 0.0f,incorrect = 0.0f, wordPer = 0.7f;
     [SerializeField] GameObject hpBar;
     //make KrillStreak asap
     void Start()
     {
-        
+        ScreenPos = PlayerPrefs.GetInt("ScreenPosition");
         lives = PlayerPrefs.GetInt("Lives");
         wordList = new List<GameObject[]>();
         dictionary = MakeDictionary();
@@ -50,11 +50,11 @@ public class MakeWord : MonoBehaviour
     
     void Update()
     {
-        if(transform.childCount != childs) 
+        /*if(transform.childCount != childs) 
         {
             transform.position = new Vector3(transform.position.x - (50 * (transform.childCount / wordList.Count)), transform.position.y, transform.position.z);
         }
-        childs = transform.childCount;
+        childs = transform.childCount;*/
         if( mode == 1)
         {
             DefaultMode();
@@ -89,7 +89,7 @@ public class MakeWord : MonoBehaviour
             else 
             {
                 GameObject newLetter = GameObject.Instantiate(letter, transform);
-                newLetter.transform.position = new Vector3(transform.position.x + (Screen.currentResolution.width /19f) * i, (transform.position.y), (transform.position.z));
+                newLetter.transform.position = new Vector3(transform.position.x + (Screen.currentResolution.width /ScreenPos) * i, (transform.position.y), (transform.position.z));
                 newLetter.GetComponentInChildren<Text>().text = CharWord[i].ToString();
                 newWord[i] = newLetter;
             }
@@ -140,6 +140,7 @@ public class MakeWord : MonoBehaviour
             }
             else { wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.white; }
             wordString = wordString.Substring(0, wordString.Length - 1);
+            statString += "-";
         }
 
         else if (Input.anyKeyDown) //handles any other key
@@ -149,6 +150,7 @@ public class MakeWord : MonoBehaviour
                 wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.green;
                 currChar = wordList[wordPos][letterPos].GetComponentInChildren<Text>().text.ToCharArray()[0];
                 wordString += char.ToUpper(currChar);
+                statString += char.ToUpper(currChar);
                 letterPos++;
                 wholePos++;
             }
@@ -160,6 +162,7 @@ public class MakeWord : MonoBehaviour
                 wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.red;
                 currChar = wordList[wordPos][letterPos].GetComponentInChildren<Text>().text.ToCharArray()[0];
                 wordString += char.ToLower(currChar);
+                statString += char.ToUpper(currChar);
                 letterPos++;
                 wholePos++;
 
@@ -167,8 +170,8 @@ public class MakeWord : MonoBehaviour
         }
         if (letterPos == wordList[wordPos].Length) //checks for word end
         {
-            PlayerPrefs.SetString(currPlayer, PlayerPrefs.GetString(currPlayer) + wordString);
-            PlayerPrefs.SetString("Global", PlayerPrefs.GetString("Global") + wordString);
+            PlayerPrefs.SetString(currPlayer, PlayerPrefs.GetString(currPlayer) + statString);
+            PlayerPrefs.SetString("Global", PlayerPrefs.GetString("Global") + statString);
             correct = 0.0f;
             for (int i = 0; i < wordString.Length; i++)
             {
@@ -178,6 +181,7 @@ public class MakeWord : MonoBehaviour
             wordPer = correct / (float)wordString.Length;
 
             wordString = "";
+            statString = "";
 
 
             //maxdif = 22

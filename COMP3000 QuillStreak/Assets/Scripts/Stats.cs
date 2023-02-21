@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class Stats : MonoBehaviour
 {
-    [SerializeField] Text statText;
+    [SerializeField] Text statText,backSpaceCount;
     [SerializeField] Button getStatButton;
     [SerializeField] Slider[] sliders;
     [SerializeField] Dropdown dropdown;
@@ -42,9 +42,17 @@ public class Stats : MonoBehaviour
             sliders[i].maxValue = 1;
             sliders[i].value = 1;
         }
-
+        int backSpace = 0;
         statText.text = PlayerPrefs.GetString(name);
-        
+        for(int i = 0; i < statText.text.Length; i++) 
+        {
+            if(statText.text[i] == '-') 
+            {
+                statText.text.Remove(i, 1);
+                backSpace++; 
+            }
+        }
+       
         char[] tempChars = statText.text.ToCharArray();
         for (int i = 0; i < tempChars.Length; i++)
         {
@@ -77,6 +85,7 @@ public class Stats : MonoBehaviour
         {
             statText.text = "Stats Corrupted, try again";
         }
+        backSpaceCount.text = "BackSpaces Used: " + backSpace.ToString();
 
     }
     public void getStats() 

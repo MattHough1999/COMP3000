@@ -7,16 +7,11 @@ using UnityEngine.UI;
 public class HomeMenu : MonoBehaviour
 {
     public Button secret;
-    public Text Difftext;
-    public Text WordText;
-    public Text NameText;
+    public Text Difftext, WordText, NameText, PosText;
     public InputField PlayerName;
-    public Slider DiffSlider;
-    public Slider WordSlider;
+    public Slider DiffSlider, PositionSlider, WordSlider;
     public Image Blank;
-    public Sprite Check;
-    public Sprite Cross;
-    public Sprite Cirlce;
+    public Sprite Check, Cross, Circle;
     private int words = 4;
     private int diff = 5;
     
@@ -47,6 +42,11 @@ public class HomeMenu : MonoBehaviour
         WordText.text = "Word Count: " + (words + 1);
         PlayerPrefs.SetInt("WordCount", words);
     }
+    public void posChange()
+    {
+        PosText.text = PositionSlider.value.ToString();
+        PlayerPrefs.SetInt("ScreenPosition", (int)PositionSlider.value);
+    }
     public void nameChange() 
     {
         PlayerPrefs.SetString("currPlayer", PlayerName.text);
@@ -71,7 +71,7 @@ public class HomeMenu : MonoBehaviour
         else if (!Found)
         {
             NameText.text = "New Player Added!";
-            Blank.sprite = Cirlce;
+            Blank.sprite = Circle;
             PlayerPrefs.SetString("ALLPLAYERS", allPlayers + PlayerName.text + ' ');
             PlayerPrefs.SetString("currPlayer", PlayerName.text);
         }

@@ -279,9 +279,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  rb: {fileID: 0}
   Value: 0
   smoothTime: 0.3
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!1 &206698035
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,9 +316,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  rb: {fileID: 0}
   Value: 0
   smoothTime: 0.3
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &206698037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -833,7 +833,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   letter: {fileID: 3367716563271872068, guid: bb539d8d7093f264c9fb36c597336921, type: 3}
   slider: {fileID: 2113246146}
+  animator: {fileID: 0}
   difficulty: 20
+  hpBar: {fileID: 0}
 --- !u!1001 &1087982551
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1370,7 +1372,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   letter: {fileID: 3367716563271872068, guid: bb539d8d7093f264c9fb36c597336921, type: 3}
   slider: {fileID: 2113246146}
+  animator: {fileID: 0}
   difficulty: 20
+  hpBar: {fileID: 0}
 --- !u!1 &1772749582
 GameObject:
   m_ObjectHideFlags: 0
@@ -1829,9 +1833,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  rb: {fileID: 0}
   Value: 0
   smoothTime: 0.6
+  velocity: {x: 0, y: 0, z: 0}
 --- !u!54 &1966939290
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1952,7 +1956,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: a2ff0adc7072476488748c5d618c37ac,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.6
+      value: 0.47
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a2ff0adc7072476488748c5d618c37ac,
         type: 3}
@@ -2071,7 +2075,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   letter: {fileID: 3367716563271872068, guid: bb539d8d7093f264c9fb36c597336921, type: 3}
   slider: {fileID: 2113246146}
+  animator: {fileID: 0}
   difficulty: 20
+  hpBar: {fileID: 0}
 --- !u!1001 &2106353670
 PrefabInstance:
   m_ObjectHideFlags: 0
