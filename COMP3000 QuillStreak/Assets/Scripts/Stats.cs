@@ -10,11 +10,13 @@ public class Stats : MonoBehaviour
     [SerializeField] Button getStatButton;
     [SerializeField] Slider[] sliders;
     [SerializeField] Dropdown dropdown;
+
     private bool doneFirst = false;
     private string currChar;
     
     private void Start()
     {
+        GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("Volume", 0.5f) * PlayerPrefs.GetFloat("AmVolume", 0.5f);
         PlayerPrefs.SetInt("RunDefault@@", 0);
         getPlayers();
         //getStats("Global");
@@ -44,6 +46,7 @@ public class Stats : MonoBehaviour
         }
         int backSpace = 0;
         statText.text = PlayerPrefs.GetString(name);
+        Debug.Log(PlayerPrefs.GetString(name));
         for(int i = 0; i < statText.text.Length; i++) 
         {
             if(statText.text[i] == '-') 

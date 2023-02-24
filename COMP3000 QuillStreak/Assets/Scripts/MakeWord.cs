@@ -12,49 +12,66 @@ public class MakeWord : MonoBehaviour
     public Slider slider;
     public List<GameObject[]> wordList;
     public Animator animator;
+    [SerializeField] AudioSource effectsSource, ambientSource;
+    [SerializeField] AudioClip celebration, stumble, backspace;
     private char currChar;
     private string[] dictionary;
     private string currPlayer = "Global", wordString = "",statString = "";
     public int difficulty = 28;
     private int childs = 0, wordPos = 0,letterPos = 0, wholePos = 0,lives,mode,ScreenPos;
-    
-    private float perCalc = 0.0f,correct = 0.0f,incorrect = 0.0f, wordPer = 0.7f;
+
+    private float perCalc = 0.0f, correct = 0.0f, incorrect = 0.0f, wordPer = 0.7f;
+    private float volume = 0.5f,effVolume = 0.5f, amVolume = 0.5f, ambientPosition = 0.000f;
     [SerializeField] GameObject hpBar;
     //make KrillStreak asap
     void Start()
     {
-        ScreenPos = PlayerPrefs.GetInt("ScreenPosition");
-        lives = PlayerPrefs.GetInt("Lives");
+
+
+
+
+
+        //Set Volumes and Play continue to play ambient track.
+        volume = PlayerPrefs.GetFloat("Volume");
+        effVolume = volume * PlayerPrefs.GetFloat("EffVolume");
+        amVolume = volume * PlayerPrefs.GetFloat("AmVolume");
+        ambientPosition = PlayerPrefs.GetFloat("AmbientPosition");
+        ambientSource.volume = amVolume;
+        ambientSource.Play();
+        ambientSource.time = ambientPosition;
+        effectsSource.volume = effVolume;
+
+        ScreenPos = 19;
         wordList = new List<GameObject[]>();
         dictionary = MakeDictionary();
+
+        //Gets necessary saved data from playerprefs
+        lives = PlayerPrefs.GetInt("Lives");
         int numWords = PlayerPrefs.GetInt("WordCount");
         difficulty = PlayerPrefs.GetInt("Difficulty");
-        
         currPlayer = PlayerPrefs.GetString("currPlayer");
+        mode = PlayerPrefs.GetInt("RunDefault@@");
+
+        //Error nullifiction
         if (PlayerPrefs.GetString("currPlayer", "NoPlayerSet") == "NoPlayerSet") 
         {
             currPlayer = "Global";
         }
-        
+        //Writes words to UI
         for(int i = 0; i <= numWords; i++)
         {
             writeWord(PickWord());
         }
+        //Colours HP Bar
         for (int i = 0; i < lives; i++)
         {
             hpBar.transform.GetChild(i).gameObject.GetComponent<Image>().color = Color.green;
         }
 
-        mode = PlayerPrefs.GetInt("RunDefault@@");
     }
     
     void Update()
     {
-        /*if(transform.childCount != childs) 
-        {
-            transform.position = new Vector3(transform.position.x - (50 * (transform.childCount / wordList.Count)), transform.position.y, transform.position.z);
-        }
-        childs = transform.childCount;*/
         if( mode == 1)
         {
             DefaultMode();
@@ -130,7 +147,7 @@ public class MakeWord : MonoBehaviour
     void DefaultMode() 
     {
 
-        if (Input.GetKey(KeyCode.Escape)) SceneManager.LoadScene("Menu");
+        if (Input.GetKey(KeyCode.Escape)) { PlayerPrefs.SetFloat("AmbientPosition", 0.000f); SceneManager.LoadScene("Menu"); }
 
         else if (Input.GetKeyDown(KeyCode.Backspace) == true) //handles backspace
         {
@@ -141,6 +158,7 @@ public class MakeWord : MonoBehaviour
             else { wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.white; }
             wordString = wordString.Substring(0, wordString.Length - 1);
             statString += "-";
+            effectsSource.PlayOneShot(backspace,volume);
         }
 
         else if (Input.anyKeyDown) //handles any other key
@@ -162,7 +180,7 @@ public class MakeWord : MonoBehaviour
                 wordList[wordPos][letterPos].GetComponentInChildren<Image>().color = Color.red;
                 currChar = wordList[wordPos][letterPos].GetComponentInChildren<Text>().text.ToCharArray()[0];
                 wordString += char.ToLower(currChar);
-                statString += char.ToUpper(currChar);
+                statString += char.ToLower(currChar);
                 letterPos++;
                 wholePos++;
 
@@ -191,10 +209,16 @@ public class MakeWord : MonoBehaviour
                 hpBar.transform.GetChild(lives - 1).gameObject.GetComponent<Image>().color = Color.red;
                 lives--;
                 PlayerPrefs.SetInt("Lives", lives);
-                if (lives == 0) { PlayerPrefs.SetString("OverText", "Oh No! Your Ran Out Of Lives...\nPick Your Name To See Your Stats!"); SceneManager.LoadScene("StatsPage"); }
-                animator.SetTrigger("Stumble");
+                if (lives == 0) { PlayerPrefs.SetString("OverText", "Oh No! Your Ran Out Of Lives...\nPick Your Name To See Your Stats!"); PlayerPrefs.SetFloat("AmbientPosition", 0.000f); SceneManager.LoadScene("StatsPage"); }
+                //Grabs the animator component and checks that it isn't already playing the celebrate or stumble animation (prevents character flying)
+                if (animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Running@Backflip" || animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Gangnam Style@Floating") { }
+                else { animator.SetTrigger("Stumble"); }
             }
-            else { animator.SetTrigger("Celebrate"); }
+            else 
+            {
+                if (animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Running@Backflip" || animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Gangnam Style@Floating") { }
+                else { animator.SetTrigger("Celebrate"); }
+            }
             
 
             if (wordPos == wordList.Count - 1 && lives != 0) 
@@ -203,6 +227,7 @@ public class MakeWord : MonoBehaviour
                 { 
                     PlayerPrefs.SetInt("Difficulty", PlayerPrefs.GetInt("Difficulty") + 1); 
                 }
+                PlayerPrefs.SetFloat("AmbientPosition", ambientSource.time);
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name); 
             }
             
@@ -217,7 +242,7 @@ public class MakeWord : MonoBehaviour
 
     void NonLatinMode()
     {
-        if (Input.GetKey(KeyCode.Escape)) SceneManager.LoadScene("Menu");
+        if (Input.GetKey(KeyCode.Escape)) PlayerPrefs.SetFloat("AmbientPosition", 0.000f); SceneManager.LoadScene("Menu");
         if (Input.GetKeyDown(KeyCode.Backspace) == true) //handles backspace
         {
             if (letterPos > 0)
@@ -277,20 +302,23 @@ public class MakeWord : MonoBehaviour
                 hpBar.transform.GetChild(lives - 1).gameObject.GetComponent<Image>().color = Color.red;
                 lives--;
                 PlayerPrefs.SetInt("Lives", lives);
-                if (lives == 0) { SceneManager.LoadScene("StatsPage"); }
+                if (lives == 0) { PlayerPrefs.SetFloat("AmbientPosition", 0.000f); PlayerPrefs.SetFloat("AmbientPosition", 0.000f); SceneManager.LoadScene("StatsPage"); }
                 animator.SetTrigger("Stumble");
             }
             else { animator.SetTrigger("Celebrate"); }
 
 
-            if (wordPos == wordList.Count - 1) { PlayerPrefs.SetInt("Difficulty", PlayerPrefs.GetInt("Difficulty") + 1); SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
+            if (wordPos == wordList.Count - 1 && lives != 0) 
+            { 
+                if(difficulty <= 27) { PlayerPrefs.SetInt("Difficulty", PlayerPrefs.GetInt("Difficulty") + 1); }
+                PlayerPrefs.SetFloat("AmbientPosition", ambientSource.time); 
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name); }
 
             correct = 0.0f;
             incorrect = 0.0f;
             letterPos = 0;
             wordPos++;
             wordPer = 0.00f;
-            //source.Play();
         }
     }
     void findBiggest()
@@ -302,5 +330,9 @@ public class MakeWord : MonoBehaviour
         }      
            
     }
+    
+
+        
+   
 
 }

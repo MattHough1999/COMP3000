@@ -7,9 +7,9 @@ using UnityEngine.UI;
 public class HomeMenu : MonoBehaviour
 {
     public Button secret;
-    public Text Difftext, WordText, NameText, PosText;
+    public Text Difftext, WordText, NameText;
     public InputField PlayerName;
-    public Slider DiffSlider, PositionSlider, WordSlider;
+    public Slider DiffSlider, WordSlider;
     public Image Blank;
     public Sprite Check, Cross, Circle;
     private int words = 4;
@@ -18,6 +18,7 @@ public class HomeMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("Volume", 0.5f) * PlayerPrefs.GetFloat("AmVolume", 0.5f); 
         PickEng();
         PlayerPrefs.SetInt("Lives", 6);
         PlayerPrefs.SetInt("Difficulty", diff);
@@ -43,11 +44,7 @@ public class HomeMenu : MonoBehaviour
         WordText.text = "Word Count: " + (words + 1);
         PlayerPrefs.SetInt("WordCount", words);
     }
-    public void posChange()
-    {
-        PosText.text = PositionSlider.value.ToString();
-        PlayerPrefs.SetInt("ScreenPosition", (int)PositionSlider.value);
-    }
+    
     public void nameChange() 
     {
         PlayerPrefs.SetString("currPlayer", PlayerName.text);
@@ -98,31 +95,17 @@ public class HomeMenu : MonoBehaviour
         PlayerPrefs.SetInt("RunDefault@@", 1);
         PlayerPrefs.SetString("SelectedDictionary", "filter");
     }
-    public void loadSpace() 
+
+    public void loadScene(string scene) 
     {
-        SceneManager.LoadScene("Space");
-    }
-    public void loadForest()
-    {
-        SceneManager.LoadScene("Forest");
-    }
-    public void loadWest()
-    {
-        SceneManager.LoadScene("WildWest");
-    }
-    public void loadCastle()
-    {
-        nameChange();
-        SceneManager.LoadScene("Castle");
+        Debug.Log("clicked");
+        SceneManager.LoadScene(scene);
     }
     public void exitGame() 
     {
         Application.Quit();
     }
-    public void viewStats() 
-    {
-        SceneManager.LoadScene("StatsPage");
-    }
+    
     private bool A = false;
     private bool d = false;
     private bool u = false;

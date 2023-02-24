@@ -17,6 +17,5 @@ public class Rotate : MonoBehaviour
     void FixedUpdate()
     {
         transform.Rotate(new Vector3(0, 0, speed), Space.Self);
-        
     }
 }

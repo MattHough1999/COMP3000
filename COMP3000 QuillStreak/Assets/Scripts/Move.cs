@@ -18,7 +18,6 @@ public class Move : MonoBehaviour
     void Start()
     {
         PTransform = transform;
-        //rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
