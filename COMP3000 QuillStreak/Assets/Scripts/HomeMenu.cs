@@ -98,6 +98,7 @@ public class HomeMenu : MonoBehaviour
 
     public void loadScene(string scene) 
     {
+
         Debug.Log("clicked");
         SceneManager.LoadScene(scene);
     }

@@ -26,11 +26,6 @@ public class MakeWord : MonoBehaviour
     //make KrillStreak asap
     void Start()
     {
-
-
-
-
-
         //Set Volumes and Play continue to play ambient track.
         volume = PlayerPrefs.GetFloat("Volume");
         effVolume = volume * PlayerPrefs.GetFloat("EffVolume");
@@ -210,13 +205,15 @@ public class MakeWord : MonoBehaviour
                 lives--;
                 PlayerPrefs.SetInt("Lives", lives);
                 if (lives == 0) { PlayerPrefs.SetString("OverText", "Oh No! Your Ran Out Of Lives...\nPick Your Name To See Your Stats!"); PlayerPrefs.SetFloat("AmbientPosition", 0.000f); SceneManager.LoadScene("StatsPage"); }
+                effectsSource.PlayOneShot(stumble,effVolume);
                 //Grabs the animator component and checks that it isn't already playing the celebrate or stumble animation (prevents character flying)
-                if (animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Running@Backflip" || animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Gangnam Style@Floating") { }
+                if (animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Stumble" || animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Celebration") { }
                 else { animator.SetTrigger("Stumble"); }
             }
             else 
             {
-                if (animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Running@Backflip" || animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Gangnam Style@Floating") { }
+                effectsSource.PlayOneShot(celebration, effVolume);
+                if (animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Stumble" || animator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Celebration") { }
                 else { animator.SetTrigger("Celebrate"); }
             }
             

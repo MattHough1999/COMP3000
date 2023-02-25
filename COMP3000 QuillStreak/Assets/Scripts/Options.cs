@@ -10,6 +10,7 @@ public class Options : MonoBehaviour
     [SerializeField] Image tick;
     [SerializeField] AudioSource ambientSource, effSource;
     [SerializeField] AudioClip testClip;
+    [SerializeField] AudioSystem audioSystem;
     public float mvol = 0.5f, avol = 0.5f, evol = 0.5f;
     float timer = 2.0f;
     // Start is called before the first frame update
@@ -62,6 +63,7 @@ public class Options : MonoBehaviour
 
     public void changeScene(string scene) 
     {
+
         SceneManager.LoadScene(scene);
     }
     public void exitGame() 

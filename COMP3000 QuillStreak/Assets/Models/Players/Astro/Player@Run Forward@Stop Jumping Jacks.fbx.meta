@@ -5,7 +5,7 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -203655887218126122
-    second: Run Forward@Stop Jumping Jacks
+    second: Celebration
   externalObjects: {}
   materials:
     materialImportMode: 1
@@ -35,7 +35,7 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Run Forward@Stop Jumping Jacks
+      name: Celebration
       takeName: mixamo.com
       internalID: 0
       firstFrame: 0
